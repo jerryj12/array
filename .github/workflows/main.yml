@@ -1,9 +1,7 @@
-name: Deploy to Hostinger
+name: Deploy to Hostinger via FTP
 
 on:
-  push:
-    branches:
-      - main  # Replace with your branch name
+  workflow_dispatch:  # Enable manual execution
 
 jobs:
   deploy:
@@ -13,14 +11,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Set Up SSH Key
+      - name: Set Up FTP
         run: |
-          echo "$SSH_PRIVATE_KEY" > ssh_key
-          chmod 600 ssh_key
-          eval "$(ssh-agent -s)"
-          ssh-add ssh_key
+          sudo apt-get -y install lftp
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
 
       - name: Build Code
         run: |
@@ -30,11 +27,23 @@ jobs:
       - name: Create ZIP Archive
         run: |
           # Add commands to create a ZIP archive of your build output
-            zip -r my_code.zip build/
+          zip -r my_code.zip build/
+          # Replace with your actual build commands
 
-      - name: Upload ZIP Archive to Hostinger
+      - name: Upload ZIP Archive to Hostinger via FTP
         run: |
-          # Add commands to upload the ZIP archive to your Hostinger server using SCP
-          scp -i ssh_key my_code.zip u813984108.ahmed@ftp://62.72.50.151:~/
-          # Replace 'user' and 'your_hostinger_server' with your server credentials
+          # Install the required tools if not already installed
+          sudo apt-get -y install lftp
 
+          # Create a script file to upload the ZIP archive via FTP
+          echo "open -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER" > ftp_commands
+          echo "cd ~/" >> ftp_commands  # Replace with your desired destination directory
+          echo "put my_code.zip" >> ftp_commands    # Replace with your ZIP archive filename
+          echo "bye" >> ftp_commands
+
+          # Use lftp to execute the FTP commands from the script file
+          lftp -f ftp_commands
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
