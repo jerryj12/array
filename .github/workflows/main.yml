@@ -19,11 +19,6 @@ jobs:
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
 
-      - name: Build Code
-        run: |
-          # Add your build commands here
-          # Example: npm install, npm run build, or any build process
-
       - name: Create ZIP Archive
         run: |
           # Add commands to create a ZIP archive of your build output
