@@ -1,0 +1,40 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main  # Replace with your branch name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set Up SSH Key
+        run: |
+          echo "$SSH_PRIVATE_KEY" > ssh_key
+          chmod 600 ssh_key
+          eval "$(ssh-agent -s)"
+          ssh-add ssh_key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Build Code
+        run: |
+          # Add your build commands here
+          # Example: npm install, npm run build, or any build process
+
+      - name: Create ZIP Archive
+        run: |
+          # Add commands to create a ZIP archive of your build output
+            zip -r my_code.zip build/
+
+      - name: Upload ZIP Archive to Hostinger
+        run: |
+          # Add commands to upload the ZIP archive to your Hostinger server using SCP
+          scp -i ssh_key my_code.zip u813984108.ahmed@ftp://62.72.50.151:~/
+          # Replace 'user' and 'your_hostinger_server' with your server credentials
+
