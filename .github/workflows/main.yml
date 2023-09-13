@@ -2,7 +2,16 @@ name: Deploy to Hostinger via FTP
 
 on:
   workflow_dispatch:  # Enable manual execution
-
+  # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Person to greet'
+        # Default value if no value is explicitly provided
+        default: 'World'
+        # Input has to be provided for the workflow to run
+        required: true
+  
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -22,7 +31,7 @@ jobs:
       - name: Create ZIP Archive
         run: |
           # Add commands to create a ZIP archive of your project in the root directory
-          zip -r project.zip .
+          zip -r ${{ github.event.inputs.name }}.zip .
           # The "." indicates the current directory, which is the root of your repository
 
       - name: Upload ZIP Archive to Hostinger via FTP
