@@ -34,7 +34,7 @@ jobs:
           zip -r ${{ github.event.inputs.name }}.zip .
           # The "." indicates the current directory, which is the root of your repository
 
-      - name: Upload ZIP Archive to Hostinger via FTP
+      - name: Upload ZIP Archive to Linux Server via FTP
         run: |
           # Install the required tools if not already installed
           sudo apt-get -y install lftp
@@ -43,7 +43,7 @@ jobs:
           echo "set ssl:check-hostname no" >> ftp_commands  # Disable hostname checking
           echo "open -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER" >> ftp_commands
           echo "cd ~/" >> ftp_commands  # Replace with your desired destination directory
-          echo "put project.zip" >> ftp_commands    # Replace with your ZIP archive filename
+          echo "put ${{ github.event.inputs.name }}.zip" >> ftp_commands    # Replace with your ZIP archive filename
           echo "bye" >> ftp_commands
 
           # Use lftp to execute the FTP commands from the script file
