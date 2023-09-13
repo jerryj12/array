@@ -1,0 +1,35 @@
+name: Authentication and Token Extraction
+
+on:
+  push:
+    branches:
+      - main  # Replace with your branch name
+
+jobs:
+  authentication:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Perform Authentication
+        run: |
+          endpoint=${{ secrets.ITAR_CNTRL_M_API_ENDPNT }}
+          user=${{ secrets.CTRLM_USER_ID }}
+          passwd=${{ secrets.CTRLM_PASSWD }}
+
+          # Make the authentication request and capture the response
+          response=$(curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"$user\",\"password\":\"$passwd\"}" "$endpoint/session/login")
+
+          # Trim spaces and newlines from the response
+          login=$(echo ${response//[$'\t\r\n ']})
+
+          # Extract the authentication token
+          token=$(echo ${login##*token\" : \"} | sed -e 's/^.*"token":"\([^"]*\)".*$/\1/')
+          
+          echo "Authentication token: $token"
+        env:
+          ITAR_CNTRL_M_API_ENDPNT: ${{ secrets.ITAR_CNTRL_M_API_ENDPNT }}
+          CTRLM_USER_ID: ${{ secrets.CTRLM_USER_ID }}
+          CTRLM_PASSWD: ${{ secrets.CTRLM_PASSWD }}
