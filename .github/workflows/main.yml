@@ -1,4 +1,4 @@
-name: Deploy to Hostinger via FTP
+name: Deploy to Linux Server via FTP
 
 on:
   workflow_dispatch:  # Enable manual execution
@@ -6,7 +6,7 @@ on:
     inputs:
       name:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
+        description: 'FileName'
         # Default value if no value is explicitly provided
         default: 'World'
         # Input has to be provided for the workflow to run
