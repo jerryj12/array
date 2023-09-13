@@ -21,9 +21,9 @@ jobs:
 
       - name: Create ZIP Archive
         run: |
-          # Add commands to create a ZIP archive of your build output
-          zip -r 25-2-23.zip /
-          # Replace with your actual build commands
+          # Add commands to create a ZIP archive of your project in the root directory
+          zip -r project.zip .
+          # The "." indicates the current directory, which is the root of your repository
 
       - name: Upload ZIP Archive to Hostinger via FTP
         run: |
@@ -34,7 +34,7 @@ jobs:
           echo "set ssl:check-hostname no" >> ftp_commands  # Disable hostname checking
           echo "open -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER" >> ftp_commands
           echo "cd ~/" >> ftp_commands  # Replace with your desired destination directory
-          echo "put 25-2-23.zip" >> ftp_commands    # Replace with your ZIP archive filename
+          echo "put project.zip" >> ftp_commands    # Replace with your ZIP archive filename
           echo "bye" >> ftp_commands
 
           # Use lftp to execute the FTP commands from the script file
