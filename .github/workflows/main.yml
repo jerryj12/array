@@ -7,11 +7,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    inputs:
-      destination-folder:
-        description: 'Destination folder for FTP upload'
-        required: true
-
+    env:
+      DESTINATION_FOLDER: ${{ github.event.inputs.destination-folder }}
+    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -23,7 +21,6 @@ jobs:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          DESTINATION_FOLDER: ${{ inputs.destination-folder }}
 
       - name: Create ZIP Archive
         run: |
@@ -49,4 +46,4 @@ jobs:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          DESTINATION_FOLDER: ${{ inputs.destination-folder }}
+          DESTINATION_FOLDER: ${{ github.event.inputs.destination-folder }}
