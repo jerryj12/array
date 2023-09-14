@@ -52,3 +52,29 @@ jobs:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+
+
+      - name: Login
+        run: |
+          login=$(curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"$USER\",\"password\":\"$PASSWORD\"}" "$ENDPOINT/session/login" )
+          token=$(echo ${login##*token\" : \"} | sed -e 's/^.*"token":"\([^"]*\)".*$/\1/')
+
+      - name: Order Job
+        run: |
+          curl -X POST -H "Authorization: Bearer $token" --header "Content-Type: application/json" --header "Accept: application/json" -d "{
+            \"ctm\": \"$CTM\",
+            \"folder\": \"$FOLDER_NAME\",
+            \"jobs\": \"$JOB_NAME\",
+            \"hold\": \"false\",
+            \"ignoreCriteria\": \"true\",
+            \"independentFlow\": \"false\",
+            \"orderDate\": \"$ORDER_DATE\",
+            \"waitForOrderDate\": \"false\",
+            \"createDuplicate\": \"false\",
+            \"orderIntoFolder\": \"Recent\",
+            \"variables\": [{\"arg\":\"12345\"}]
+          }" "$ENDPOINT/run/order"
+
+      - name: Logout
+        run: |
+          curl -g -k -H "Authorization: Bearer $token" -X POST "$ENDPOINT/session/logout"
