@@ -47,7 +47,7 @@ jobs:
           echo "bye" >> ftp_commands
 
           # Use lftp to execute the FTP commands from the script file
-          lftp -f ftp_commands
+          #lftp -f ftp_commands
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USER: ${{ secrets.FTP_USER }}
