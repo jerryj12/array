@@ -32,7 +32,7 @@ jobs:
         run: |
           # Add commands to create a ZIP archive of your project in the root directory
           cd PLM_SOURCE/BUILD_MASTER
-          zip -r ${{ github.event.inputs.name }}.zip ${{ github.event.inputs.name }}
+          zip -r ${{ github.event.inputs.name }}.zip ${{ github.event.inputs.name }}/
           # The "." indicates the current directory, which is the root of your repository
 
       - name: Upload ZIP Archive to Linux Server via FTP
