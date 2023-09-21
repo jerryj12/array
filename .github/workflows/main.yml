@@ -54,47 +54,47 @@ jobs:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
 
 
-      - name: Set up environment
-        run: |
-          endpoint=${{ secrets.ITAR_CNTRL_M_API_ENDPNT }}
-          user=${{ secrets.CTRLM_USER_ID }}
-          passwd=${{ secrets.CTRLM_PASSWD }}
-          ctm=HANICMAP1
-          folderName=PLM-PLMTST-DEPLOYMENT
-          orderDate=$(date '+%Y%m%d')
-          jobName=Enovia_Deployment
-        env:
-          endpoint: $endpoint
-          user: $user
-          passwd: $passwd
-          ctm: $ctm
-          folderName: $folderName
-          orderDate: $orderDate
-          jobName: $jobName
+      #- name: Set up environment
+        #run: |
+          #endpoint=${{ secrets.ITAR_CNTRL_M_API_ENDPNT }}
+          #user=${{ secrets.CTRLM_USER_ID }}
+          #passwd=${{ secrets.CTRLM_PASSWD }}
+          #ctm=HANICMAP1
+          #folderName=PLM-PLMTST-DEPLOYMENT
+          #orderDate=$(date '+%Y%m%d')
+          #jobName=Enovia_Deployment
+        #env:
+          #endpoint: $endpoint
+          #user: $user
+          #passwd: $passwd
+          #ctm: $ctm
+          #folderName: $folderName
+          #orderDate: $orderDate
+          #jobName: $jobName
 
-      - name: Login
-        run: |
-          login=$(curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"$user\",\"password\":\"$passwd\"}" "$endpoint/session/login" )
-          token=$(echo ${login//[$'\t\r\n ']})
-        env:
-          token: $token
+      #- name: Login
+        #run: |
+          #login=$(curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"$user\",\"password\":\"$passwd\"}" "$endpoint/session/login" )
+          #token=$(echo ${login//[$'\t\r\n ']})
+        #env:
+          #token: $token
 
-      - name: Order Job
-        run: |
-          curl -X POST -H "Authorization: Bearer $token" --header "Content-Type: application/json" --header "Accept: application/json" -d "{
-            \"ctm\": \"$ctm\",
-            \"folder\": \"$folderName\",
-            \"jobs\": \"$jobName\",
-            \"hold\": \"false\",
-            \"ignoreCriteria\": \"true\",
-            \"independantFlow\": \"false\",
-            \"orderDate\": \"$orderDate\",
-            \"waitForOrderDate\": \"false\",
-            \"createDuplicate\": \"false\",
-            \"orderIntoFolder\": \"Recent\",
-            \"variables\": [{\"arg\":\"12345\"}]
-          }" "$endpoint/run/order"
+      #- name: Order Job
+        #run: |
+          #curl -X POST -H "Authorization: Bearer $token" --header "Content-Type: application/json" --header "Accept: application/json" -d "{
+            #\"ctm\": \"$ctm\",
+            #\"folder\": \"$folderName\",
+            #\"jobs\": \"$jobName\",
+            #\"hold\": \"false\",
+            #\"ignoreCriteria\": \"true\",
+            #\"independantFlow\": \"false\",
+            #\"orderDate\": \"$orderDate\",
+            #\"waitForOrderDate\": \"false\",
+            #\"createDuplicate\": \"false\",
+            #\"orderIntoFolder\": \"Recent\",
+            #\"variables\": [{\"arg\":\"12345\"}]
+          #}" "$endpoint/run/order"
 
-      - name: Logout
-        run: |
-          curl -g -k -H "Authorization: Bearer $token" -X POST "$endpoint/session/logout"
+      #- name: Logout
+        #run: |
+          #curl -g -k -H "Authorization: Bearer $token" -X POST "$endpoint/session/logout"
