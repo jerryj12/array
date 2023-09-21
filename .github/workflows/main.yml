@@ -6,9 +6,9 @@ on:
     inputs:
       name:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'FileName'
+        description: 'FolderName'
         # Default value if no value is explicitly provided
-        default: 'World'
+        default: '16_OCT_2023'
         # Input has to be provided for the workflow to run
         required: true
   
@@ -31,7 +31,7 @@ jobs:
       - name: Create ZIP Archive
         run: |
           # Add commands to create a ZIP archive of your project in the root directory
-          zip -r ${{ github.event.inputs.name }}.zip .
+          zip -r ${{ github.event.inputs.name }}.zip PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.name }}
           # The "." indicates the current directory, which is the root of your repository
 
       - name: Upload ZIP Archive to Linux Server via FTP
