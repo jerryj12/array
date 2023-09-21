@@ -37,7 +37,7 @@ jobs:
       - name: Upload ZIP Archive to Linux Server via FTP
         run: |
           # Install the required tools if not already installed
-          sudo apt-get -y install lftp
+          #sudo apt-get -y install lftp
 
           # Create a script file to upload the ZIP archive via FTP
           echo "set ssl:check-hostname no" >> ftp_commands  # Disable hostname checking
