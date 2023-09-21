@@ -42,7 +42,7 @@ jobs:
           # Create a script file to upload the ZIP archive via FTP
           echo "set ssl:check-hostname no" >> ftp_commands  # Disable hostname checking
           echo "open -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER" >> ftp_commands
-          echo "cd ~/" >> ftp_commands  # Replace with your desired destination directory
+          echo "cd ~/PLM_SOURCE/BUILD_MASTER/" >> ftp_commands  # Replace with your desired destination directory
           echo "put ${{ github.event.inputs.name }}.zip" >> ftp_commands    # Replace with your ZIP archive filename
           echo "bye" >> ftp_commands
 
