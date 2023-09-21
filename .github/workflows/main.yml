@@ -22,7 +22,7 @@ jobs:
 
       - name: Set Up FTP
         run: |
-          sudo apt-get -y install lftp
+          #sudo apt-get -y install lftp
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USER: ${{ secrets.FTP_USER }}
