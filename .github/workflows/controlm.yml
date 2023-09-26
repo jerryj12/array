@@ -1,33 +1,41 @@
-name: Authentication and Token Extraction
-
 on:
   workflow_dispatch:
+    inputs:
+      name:
+        description: 'FolderName'
+        default: '16_OCT_2023'
+        required: true
+      environment:
+        description: 'Environment Type (DEV, TST, PROD)'
+        default: 'DEV'
+        required: true
 
 jobs:
-  authentication:
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: self-hosted
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Perform Authentication
+      - name: Set Up FTP
         run: |
-          endpoint=${{ secrets.ITAR_CNTRL_M_API_ENDPNT }}
-          user=${{ secrets.CTRLM_USER_ID }}
-          passwd=${{ secrets.CTRLM_PASSWD }}
+          # Determine the target server based on the environment type
+          case ${{ github.event.inputs.environment }} in
+            "DEV")
+              FTP_SERVER="${{ secrets.DEV_SERVER }}"
+              ;;
+            "TST")
+              FTP_SERVER="${{ secrets.TST_SERVER }}"
+              ;;
+            "PROD")
+              FTP_SERVER="${{ secrets.PROD_SERVER }}"
+              ;;
+            *)
+              echo "Invalid environment type provided."
+              exit 1
+              ;;
+          done
 
-          # Make the authentication request and capture the response
-          response=$(curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"$user\",\"password\":\"$passwd\"}" "$endpoint/session/login")
-
-          # Trim spaces and newlines from the response
-          login=$(echo ${response//[$'\t\r\n ']})
-
-          # Extract the authentication token
-          token=$(echo ${login##*token\" : \"} | sed -e 's/^.*"token":"\([^"]*\)".*$/\1/')
-          
-          echo "Authentication token: $token"
-        env:
-          ITAR_CNTRL_M_API_ENDPNT: ${{ secrets.ITAR_CNTRL_M_API_ENDPNT }}
-          CTRLM_USER_ID: ${{ secrets.CTRLM_USER_ID }}
-          CTRLM_PASSWD: ${{ secrets.CTRLM_PASSWD }}
+          # You can now use $FTP_SERVER in your FTP commands
+          # For example: lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER
