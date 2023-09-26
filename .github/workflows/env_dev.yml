@@ -1,4 +1,4 @@
-name: Deploy to Linux Server via FTP
+name: Deploy to specific env
 
 on:
   workflow_dispatch:
