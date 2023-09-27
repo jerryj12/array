@@ -30,4 +30,4 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         source: "PLM_SOURCE/BUILD_MASTER/deploy.zip"
-        target: "./scimail"
+        target: "/scimail"
