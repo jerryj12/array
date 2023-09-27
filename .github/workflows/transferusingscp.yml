@@ -32,7 +32,7 @@ jobs:
         run: |
           # Add commands to create a ZIP archive of your project in the root directory 
           cd PLM_SOURCE/BUILD_MASTER
-          zip -r ${{ github.event.inputs.name }}.zip ${{ github.event.inputs.name }}
+          zip -r ${{ github.event.inputs.name }}.zip .
 
       - name: Copy files via SSH password
         uses: appleboy/scp-action@v0.1.4
@@ -41,5 +41,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.name }}.zip"
+          source: "${{ github.event.inputs.name }}.zip"
           target: /
