@@ -1,17 +1,12 @@
-name: Deploy to Linux Server via SCP
+name: Deploy to Hostinger Server via SCP
 
 on:
-  workflow_dispatch: # Enable manual execution
-    # Inputs the workflow accepts.
+  workflow_dispatch:
     inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'FolderName'
-        # Default value if no value is explicitly provided
-        default: '16_OCT_2023'
-        # Input has to be provided for the workflow to run
+      folder_name:
+        description: 'Folder to Zip and Deploy'
         required: true
-  
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -20,26 +15,20 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      #- name: Set Up FTP
-      #  run: |
-      #    sudo apt-get -y install lftp
-      #  env:
-      #    FTP_SERVER: ${{ secrets.FTP_SERVER }}
-      #    FTP_USER: ${{ secrets.FTP_USER }}
-      #    FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-
       - name: Create ZIP Archive
         run: |
-          # Add commands to create a ZIP archive of your project in the root directory 
-          #cd PLM_SOURCE/BUILD_MASTER
-          zip -r ${{ github.event.inputs.name }}.zip .
+          # Navigate to the specified folder
+          #cd ${{ github.workspace }}/${{ github.event.inputs.folder_name }}
+          # Create a ZIP archive of the folder
+          zip -r deploy.zip .
+        working-directory: ${{ github.workspace }}
 
-      - name: Copy files via SSH password
-        uses: appleboy/scp-action@v0.1.4
+      - name: Copy to Hostinger via SCP
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          password: ${{ secrets.PASSWORD }} # You can also use SSH key authentication
           port: ${{ secrets.PORT }}
-          source: "${{ github.event.inputs.name }}.zip"
-          target: /scimail
+          source: "deploy.zip"
+          target: "/scimail/"
