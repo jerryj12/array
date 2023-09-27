@@ -28,5 +28,5 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
-        source: "PLM_SOURCE/BUILD_MASTER/deploy.zip"
+        source: "deploy.zip"
         target: "/scimail"
