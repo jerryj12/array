@@ -1,0 +1,44 @@
+name: Deploy to Linux Server via FTP
+
+on:
+  workflow_dispatch:  # Enable manual execution
+  # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'FolderName'
+        # Default value if no value is explicitly provided
+        default: '16_OCT_2023'
+        # Input has to be provided for the workflow to run
+        required: true
+  
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      #- name: Set Up FTP
+        #run: |
+          #sudo apt-get -y install lftp
+        #env:
+          #FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          #FTP_USER: ${{ secrets.FTP_USER }}
+          #FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+
+      - name: Create ZIP Archive
+        run: |
+          # Add commands to create a ZIP archive of your project in the root directory 
+          cd PLM_SOURCE/BUILD_MASTER
+          zip -r ${{ github.event.inputs.name }}.zip ${{ github.event.inputs.name }}
+          
+      - name: upload to server via SCP
+        uses: appleboy/scp-action@master
+        with:
+           host: ${{ secrets.SSH_HOST }}
+           username: ${{ secrets.SSH_USERNAME }}
+           key: ${{ secrets.SSH_PRIVATE_KEY }}
+           source: PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.name }}.zip
+           target: /scimail/
