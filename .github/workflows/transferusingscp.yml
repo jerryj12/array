@@ -33,15 +33,13 @@ jobs:
           # Add commands to create a ZIP archive of your project in the root directory 
           cd PLM_SOURCE/BUILD_MASTER
           zip -r ${{ github.event.inputs.name }}.zip ${{ github.event.inputs.name }}
-      
-      - name: Build
-      - uses: actions/checkout@v3
-      - name: copy file via ssh password
+
+      - name: Copy files via SSH password
         uses: appleboy/scp-action@v0.1.4
         with:
-            host: ${{ secrets.HOST }}
-            username: ${{ secrets.USERNAME }}
-            password: ${{ secrets.PASSWORD }}
-            port: ${{ secrets.PORT }}
-            source: "PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.name }}.zip"
-            target: /scimail/
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: "PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.name }}.zip"
+          target: /scimail/
