@@ -16,9 +16,10 @@ jobs:
 
     - name: Copy specific folder to build directory
       run: |
-        mkdir ../build
-        cp -r PLM_SOURCE/BUILD_MASTER/16_OCT_2023 ../build
-        zip -r deploy.zip ../build
+        # mkdir ../build
+        # cp -r PLM_SOURCE/BUILD_MASTER/16_OCT_2023 ../build
+        cd PLM_SOURCE/BUILD_MASTER
+        zip -r deploy.zip 16_OCT_2023
 
     - name: Copy file via SSH password
       uses: appleboy/scp-action@master
@@ -28,5 +29,5 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
-        source: "deploy.zip"
+        source: "PLM_SOURCE/BUILD_MASTER/deploy.zip"
         target: "./scimail"
