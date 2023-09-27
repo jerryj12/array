@@ -42,4 +42,4 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           source: "${{ github.event.inputs.name }}.zip"
-          target: /
+          target: /scimail
