@@ -42,4 +42,4 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           source: "PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.name }}.zip"
-          target: /scimail/
+          target: /
