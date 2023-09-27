@@ -21,7 +21,7 @@ jobs:
           #cd ${{ github.workspace }}/${{ github.event.inputs.folder_name }}
           # Create a ZIP archive of the folder
           zip -r deploy.zip .
-        working-directory: ${{ github.workspace }}
+        #working-directory: ${{ github.workspace }}
 
       - name: Copy to Hostinger via SCP
         uses: appleboy/scp-action@master
