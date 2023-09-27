@@ -29,4 +29,4 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         source: "deploy.tar"
-        target: "/scimail"
+        target: "public_html/scimail"
