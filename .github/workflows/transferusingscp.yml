@@ -18,7 +18,7 @@ jobs:
       run: |
         mkdir ../build
         cp -r PLM_SOURCE/BUILD_MASTER/16_OCT_2023 ../build
-        tar -cvf Ahmed.tar -C ../build .
+        zip -r deploy.zip ../build
 
     - name: Copy file via SSH password
       uses: appleboy/scp-action@master
@@ -28,5 +28,5 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        source: "Ahmed.tar"
+        source: "deploy.zip"
         target: "scimail"
