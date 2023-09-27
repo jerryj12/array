@@ -1,4 +1,4 @@
-name: Deploy to Linux Server via FTP
+name: Deploy to Linux Server via SCP
 
 on:
   workflow_dispatch:  # Enable manual execution
