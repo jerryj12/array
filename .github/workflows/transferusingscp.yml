@@ -16,30 +16,25 @@ jobs:
 
     - name: Copy specific folder to build directory
       run: |
-        #mkdir ../build
-        #cp -r PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }} ../build
-        #tar -cvf ${{ github.event.inputs.folder_name }}.tar -C ../build .
-
-        cd PLM_SOURCE/BUILD_MASTER
-        zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}
-
+        mkdir ../build
+        cp -r PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }} ../build
+        tar -cvf ${{ github.event.inputs.folder_name }}.tar -C ../build .
+        
     - name: Copy file via SSH password
-      uses: garygrossgarten/github-action-scp@release
+      uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
-        local: "PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip"
-        remote: "/home/u813984108/domains/sociocast.co/public_html/scimail"
-        
+        source: "${{ github.event.inputs.folder_name }}.tar"
+        target: "/home/u813984108/domains/sociocast.co/public_html/scimail"
+
     - name: Check out the repository to the runner
       uses: actions/checkout@v4  
-
     - name: Make the script files executable
       run: chmod +x my-script.sh
-
     - name: Run the scripts
       run: |
         ./my-script.sh
