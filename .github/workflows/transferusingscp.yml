@@ -6,9 +6,6 @@ on:
       folder_name:
         description: 'Folder to Zip and Deploy'
         required: true
-      environment:
-        type: environment
-        description: Select the environment
       choice:
         type: choice
         description: Make a choice
@@ -32,17 +29,17 @@ jobs:
         
     - name: Set Environment Variables based on Environment Type
       run: |
-        if [[ "${{ github.event.inputs.environment_type }}" == "Dev" ]]; then
+        if [[ "${{ github.event.inputs.choice }}" == "Dev" ]]; then
           export HOST="${{ secrets.HOST_DEV }}"
           export USERNAME="${{ secrets.USERNAME_DEV }}"
           export PASSWORD="${{ secrets.PASSWORD_DEV }}"
           export SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY_DEV }}"
-        elif [[ "${{ github.event.inputs.environment_type }}" == "Test" ]]; then
+        elif [[ "${{ github.event.inputs.choice }}" == "Test" ]]; then
           export HOST="${{ secrets.HOST_TEST }}"
           export USERNAME="${{ secrets.USERNAME_TEST }}"
           export PASSWORD="${{ secrets.PASSWORD_TEST }}"
           export SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY_TEST }}"
-        elif [[ "${{ github.event.inputs.environment_type }}" == "Deploy" ]]; then
+        elif [[ "${{ github.event.inputs.choice }}" == "Deploy" ]]; then
           export HOST="${{ secrets.HOST_DEPLOY }}"
           export USERNAME="${{ secrets.USERNAME_DEPLOY }}"
           export PASSWORD="${{ secrets.PASSWORD_DEPLOY }}"
