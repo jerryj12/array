@@ -38,3 +38,11 @@ jobs:
         port: ${{ secrets.PORT }}
         source: "${{ github.event.inputs.folder_name }}.tar"
         target: "/home/u813984108/domains/sociocast.co/public_html/scimail"
+
+    - name: Check out the repository to the runner
+      uses: actions/checkout@v4  
+    - name: Make the script files executable
+      run: chmod +x my-script.sh
+    - name: Run the scripts
+      run: |
+        ./my-script.sh
