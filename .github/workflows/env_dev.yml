@@ -1,69 +1,23 @@
-name: Deploy to specific env
+name: Deploy to Hostinger
 
 on:
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'FolderName'
-        default: '16_OCT_2023'
-        required: true
-      environment:
-        description: 'Environment Type (DEV, TST, PROD)'
-        default: 'DEV'
-        required: true
+  workflow_dispatch: 
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: self-hosted  # This assumes you have set up a self-hosted runner on your Windows machine.
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      
+    - name: Set up SSH key
+      run: |
+        echo "$SSH_PRIVATE_KEY" > ssh_key
+        chmod 600 ssh_key
+        ssh-add ./ssh_key
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Add your SSH private key as a GitHub secret.
 
-
-      #- name: Set up environment
-        #run: |
-          #endpoint=${{ secrets.ITAR_CNTRL_M_API_ENDPNT }}
-          #user=${{ secrets.CTRLM_USER_ID }}
-          #passwd=${{ secrets.CTRLM_PASSWD }}
-          #ctm=HANICMAP1
-          #folderName=PLM-PLMTST-DEPLOYMENT
-          #orderDate=$(date '+%Y%m%d')
-          #jobName=Enovia_Deployment
-        #env:
-          #endpoint: $endpoint
-          #user: $user
-          #passwd: $passwd
-          #ctm: $ctm
-          #folderName: $folderName
-          #orderDate: $orderDate
-          #jobName: $jobName
-
-      #- name: Login
-        #run: |
-          #login=$(curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"$user\",\"password\":\"$passwd\"}" "$endpoint/session/login" )
-          #token=$(echo ${login//[$'\t\r\n ']})
-        #env:
-          #token: $token
-
-      #- name: Order Job
-        #run: |
-          #curl -X POST -H "Authorization: Bearer $token" --header "Content-Type: application/json" --header "Accept: application/json" -d "{
-            #\"ctm\": \"$ctm\",
-            #\"folder\": \"$folderName\",
-            #\"jobs\": \"$jobName\",
-            #\"hold\": \"false\",
-            #\"ignoreCriteria\": \"true\",
-            #\"independantFlow\": \"false\",
-            #\"orderDate\": \"$orderDate\",
-            #\"waitForOrderDate\": \"false\",
-            #\"createDuplicate\": \"false\",
-            #\"orderIntoFolder\": \"Recent\",
-            #\"variables\": [{\"arg\":\"12345\"}]
-          #}" "$endpoint/run/order"
-
-      #- name: Logout
-        #run: |
-          #curl -g -k -H "Authorization: Bearer $token" -X POST "$endpoint/session/logout"
+    - name: SCP file to Hostinger
+      run: scp -i ./ssh_key PLM_SOURCE/BUILD_MASTER/12_oct_2023/somefiles.txt u813984108@62.72.50.151:/scimail/
