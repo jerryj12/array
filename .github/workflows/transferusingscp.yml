@@ -1,4 +1,4 @@
-name: Deploy to Hostinger Server via SCP
+name: Deploy to Linux Server via SCP
 
 on:
   workflow_dispatch:
