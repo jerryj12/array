@@ -17,7 +17,7 @@ jobs:
     - name: Copy specific folder to build directory
       run: |
         mkdir ../build
-        cp -r PLM_SOURCE/BUILD_MASTER/16_OCT_2023 ../build
+        cp -r PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }} ../build
         tar -cvf deploy.tar -C ../build .
         
     - name: Check out the repository to the runner
@@ -33,5 +33,5 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
-        source: "deploy.tar"
+        source: "${{ github.event.inputs.name }}.tar"
         target: "/home/u813984108/domains/sociocast.co/public_html/scimail"
