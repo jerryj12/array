@@ -26,28 +26,38 @@ jobs:
         mkdir ../build
         cp -r PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }} ../build
         tar -cvf ${{ github.event.inputs.folder_name }}.tar -C ../build .
-        
+
     - name: Set Environment Variables based on Environment Type
       run: |
         if [[ "${{ github.event.inputs.choice }}" == "Dev" ]]; then
-          export HOST="${{ secrets.HOST }}"
-          export USERNAME="${{ secrets.USERNAME }}"
-          export PASSWORD="${{ secrets.PASSWORD }}"
-          export SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY }}"
+          echo "Setting Dev environment variables"
+          echo "HOST=${{ secrets.HOST }}" >> $GITHUB_ENV
+          echo "USERNAME=${{ secrets.USERNAME }}" >> $GITHUB_ENV
+          echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+          echo "SSH_PRIVATE_KEY=${{ secrets.SSH_PRIVATE_KEY }}" >> $GITHUB_ENV
         elif [[ "${{ github.event.inputs.choice }}" == "Test" ]]; then
-          export HOST="${{ secrets.HOST_TEST }}"
-          export USERNAME="${{ secrets.USERNAME_TEST }}"
-          export PASSWORD="${{ secrets.PASSWORD_TEST }}"
-          export SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY_TEST }}"
+          echo "Setting Test environment variables"
+          echo "HOST=${{ secrets.HOST_TEST }}" >> $GITHUB_ENV
+          echo "USERNAME=${{ secrets.USERNAME_TEST }}" >> $GITHUB_ENV
+          echo "PASSWORD=${{ secrets.PASSWORD_TEST }}" >> $GITHUB_ENV
+          echo "SSH_PRIVATE_KEY=${{ secrets.SSH_PRIVATE_KEY_TEST }}" >> $GITHUB_ENV
         elif [[ "${{ github.event.inputs.choice }}" == "Deploy" ]]; then
-          export HOST="${{ secrets.HOST_DEPLOY }}"
-          export USERNAME="${{ secrets.USERNAME_DEPLOY }}"
-          export PASSWORD="${{ secrets.PASSWORD_DEPLOY }}"
-          export SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY_DEPLOY }}"
+          echo "Setting Deploy environment variables"
+          echo "HOST=${{ secrets.HOST_DEPLOY }}" >> $GITHUB_ENV
+          echo "USERNAME=${{ secrets.USERNAME_DEPLOY }}" >> $GITHUB_ENV
+          echo "PASSWORD=${{ secrets.PASSWORD_DEPLOY }}" >> $GITHUB_ENV
+          echo "SSH_PRIVATE_KEY=${{ secrets.SSH_PRIVATE_KEY_DEPLOY }}" >> $GITHUB_ENV
         else
           echo "Invalid environment type selected."
           exit 1
         fi
+
+    - name: Debug - Display Environment Variables
+      run: |
+        echo "HOST=$HOST"
+        echo "USERNAME=$USERNAME"
+        echo "PASSWORD=$PASSWORD"
+        echo "SSH_PRIVATE_KEY=$SSH_PRIVATE_KEY"
 
     - name: Copy file via SSH password
       uses: appleboy/scp-action@master
