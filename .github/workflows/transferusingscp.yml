@@ -6,9 +6,16 @@ on:
       folder_name:
         description: 'Folder to Zip and Deploy'
         required: true
-      environment_type:
-        description: 'Environment Type (Dev, Test, Deploy)'
-        required: true
+      environment:
+        type: environment
+        description: Select the environment
+      choice:
+        type: choice
+        description: Make a choice
+        options:
+        - Dev
+        - Test
+        - Deploy
 
 jobs:
   build:
@@ -22,33 +29,28 @@ jobs:
         mkdir ../build
         cp -r PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }} ../build
         tar -cvf ${{ github.event.inputs.folder_name }}.tar -C ../build .
-
+        
     - name: Set Environment Variables based on Environment Type
       run: |
-        case ${{ github.event.inputs.environment_type }} in
-          "Dev")
-            export HOST="${{ secrets.HOST }}"
-            export USERNAME="${{ secrets.USERNAME }}"
-            export PASSWORD="${{ secrets.PASSWORD }}"
-            export SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY }}"
-            ;;
-          "Test")
-            export HOST="${{ secrets.HOST_TEST }}"
-            export USERNAME="${{ secrets.USERNAME_TEST }}"
-            export PASSWORD="${{ secrets.PASSWORD_TEST }}"
-            export SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY_TEST }}"
-            ;;
-          "Deploy")
-            export HOST="${{ secrets.HOST_DEPLOY }}"
-            export USERNAME="${{ secrets.USERNAME_DEPLOY }}"
-            export PASSWORD="${{ secrets.PASSWORD_DEPLOY }}"
-            export SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY_DEPLOY }}"
-            ;;
-          *)
-            echo "Invalid environment type selected."
-            exit 1
-            ;;
-        esac
+        if [[ "${{ github.event.inputs.environment_type }}" == "Dev" ]]; then
+          export HOST="${{ secrets.HOST_DEV }}"
+          export USERNAME="${{ secrets.USERNAME_DEV }}"
+          export PASSWORD="${{ secrets.PASSWORD_DEV }}"
+          export SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY_DEV }}"
+        elif [[ "${{ github.event.inputs.environment_type }}" == "Test" ]]; then
+          export HOST="${{ secrets.HOST_TEST }}"
+          export USERNAME="${{ secrets.USERNAME_TEST }}"
+          export PASSWORD="${{ secrets.PASSWORD_TEST }}"
+          export SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY_TEST }}"
+        elif [[ "${{ github.event.inputs.environment_type }}" == "Deploy" ]]; then
+          export HOST="${{ secrets.HOST_DEPLOY }}"
+          export USERNAME="${{ secrets.USERNAME_DEPLOY }}"
+          export PASSWORD="${{ secrets.PASSWORD_DEPLOY }}"
+          export SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY_DEPLOY }}"
+        else
+          echo "Invalid environment type selected."
+          exit 1
+        fi
 
     - name: Copy file via SSH password
       uses: appleboy/scp-action@master
