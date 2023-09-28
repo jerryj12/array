@@ -8,11 +8,11 @@ on:
         required: true
       choice:
         type: choice
-        description: Make a choice
+        description: 'Make a choice'
         options:
-        - Dev
-        - Test
-        - Deploy
+          - Dev
+          - Test
+          - Deploy
 
 jobs:
   build:
