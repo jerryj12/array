@@ -23,10 +23,16 @@ jobs:
         cd PLM_SOURCE/BUILD_MASTER
         zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}
 
-    - name: Copy file via SCP
-      run: |
-        $command = "scp -P $env:PORT StrictHostKeyChecking=no -i `"$env:SSH_PRIVATE_KEY`" `"$env:github_event_inputs_folder_name.zip`" `"$env:USERNAME@$env:HOST:/home/u813984108/domains/sociocast.co/public_html/scimail/`""
-        Invoke-Expression -Command $command
+    - name: Copy file via SSH password
+      uses: garygrossgarten/github-action-scp@release
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        local: "${{ github.event.inputs.folder_name }}.tar"
+        remote: "/home/u813984108/domains/sociocast.co/public_html/scimail"
         
     - name: Check out the repository to the runner
       uses: actions/checkout@v4  
