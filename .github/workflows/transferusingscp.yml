@@ -31,7 +31,7 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
-        local: "${{ github.event.inputs.folder_name }}.zip"
+        local: "PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip"
         remote: "/home/u813984108/domains/sociocast.co/public_html/scimail"
         
     - name: Check out the repository to the runner
