@@ -25,7 +25,7 @@ jobs:
 
     - name: Copy file via SCP
       run: |
-        $command = "scp -P $env:PORT -o StrictHostKeyChecking=no -i `"$env:SSH_PRIVATE_KEY`" `"$env:github_event_inputs_folder_name.zip`" `"$env:USERNAME@$env:HOST:/home/u813984108/domains/sociocast.co/public_html/scimail/`""
+        $command = "scp -P $env:PORT StrictHostKeyChecking=no -i `"$env:SSH_PRIVATE_KEY`" `"$env:github_event_inputs_folder_name.zip`" `"$env:USERNAME@$env:HOST:/home/u813984108/domains/sociocast.co/public_html/scimail/`""
         Invoke-Expression -Command $command
         
     - name: Check out the repository to the runner
