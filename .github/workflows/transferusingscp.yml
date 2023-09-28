@@ -17,12 +17,15 @@ jobs:
     - name: Copy specific folder to build directory
       run: |
         #mkdir ../build
-        cp -r PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }} ../build
-        tar -cvf ${{ github.event.inputs.folder_name }}.tar -C ../build .
+        #cp -r PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }} ../build
+        #tar -cvf ${{ github.event.inputs.folder_name }}.tar -C ../build .
+
+        cd PLM_SOURCE/BUILD_MASTER
+        zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}
 
     - name: Copy file via SCP
       run: |
-        scp -P ${{ secrets.PORT }} -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} "${{ github.event.inputs.folder_name }}.tar" ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/u813984108/domains/sociocast.co/public_html/scimail
+        scp -P ${{ secrets.PORT }} -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} "${{ github.event.inputs.folder_name }}.zip" ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/u813984108/domains/sociocast.co/public_html/scimail
 
     - name: Check out the repository to the runner
       uses: actions/checkout@v4  
