@@ -19,7 +19,12 @@ jobs:
         mkdir ../build
         cp -r PLM_SOURCE/BUILD_MASTER/16_OCT_2023 ../build
         tar -cvf deploy.tar -C ../build .
-
+        
+    - name: Check out the repository to the runner
+      uses: actions/checkout@v4  
+    - name: Run a script
+      run: ./my-script.sh
+    
     - name: Copy file via SSH password
       uses: appleboy/scp-action@master
       with:
