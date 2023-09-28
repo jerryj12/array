@@ -14,7 +14,7 @@ on:
   
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: Windows
 
     steps:
       - name: Checkout Code
