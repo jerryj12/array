@@ -25,7 +25,9 @@ jobs:
 
     - name: Copy file via SCP
       run: |
-        "C:\Program Files\Git\bin\bash.exe" -c "scp -P ${{ secrets.PORT }} -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} '${{ github.event.inputs.folder_name }}.zip' ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/u813984108/domains/sociocast.co/public_html/scimail/"
+        $command = "scp -P $env:PORT -o StrictHostKeyChecking=no -i `"$env:SSH_PRIVATE_KEY`" `"$env:github_event_inputs_folder_name.zip`" `"$env:USERNAME@$env:HOST:/home/u813984108/domains/sociocast.co/public_html/scimail/`""
+        Invoke-Expression -Command $command
+        
     - name: Check out the repository to the runner
       uses: actions/checkout@v4  
 
