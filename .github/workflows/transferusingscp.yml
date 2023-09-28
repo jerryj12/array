@@ -16,7 +16,7 @@ jobs:
 
     - name: Copy specific folder to build directory
       run: |
-        mkdir ../build
+        #mkdir ../build
         cp -r PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }} ../build
         tar -cvf ${{ github.event.inputs.folder_name }}.tar -C ../build .
 
