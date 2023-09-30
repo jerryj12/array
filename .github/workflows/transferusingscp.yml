@@ -1,5 +1,3 @@
-name: Deploy to Linux Server via SCP
-
 on:
   workflow_dispatch:
     inputs:
@@ -25,33 +23,7 @@ jobs:
       run: |
           # Add commands to create a ZIP archive of your project in the root directory 
           cd PLM_SOURCE/BUILD_MASTER
-          if ! zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}; then
-            echo "Failed to create ZIP archive."
-            exit 1
-          fi
-    
-    - name: Set Environment Variables based on Environment Type
-      id: env
-      run: |
-        if [[ "${{ github.event.inputs.choice }}" == "Dev" ]]; then
-          echo "::set-output name=host::${{ secrets.HOST }}"
-          echo "::set-output name=username::${{ secrets.USERNAME }}"
-          echo "::set-output name=password::${{ secrets.PASSWORD }}"
-          echo "::set-output name=ssh_private_key::${{ secrets.SSH_PRIVATE_KEY }}"
-        elif [[ "${{ github.event.inputs.choice }}" == "Test" ]]; then
-          echo "::set-output name=host::${{ secrets.HOST_TEST }}"
-          echo "::set-output name=username::${{ secrets.USERNAME_TEST }}"
-          echo "::set-output name=password::${{ secrets.PASSWORD_TEST }}"
-          echo "::set-output name=ssh_private_key::${{ secrets.SSH_PRIVATE_KEY_TEST }}"
-        elif [[ "${{ github.event.inputs.choice }}" == "Deploy" ]]; then
-          echo "::set-output name=host::${{ secrets.HOST_DEPLOY }}"
-          echo "::set-output name=username::${{ secrets.USERNAME_DEPLOY }}"
-          echo "::set-output name=password::${{ secrets.PASSWORD_DEPLOY }}"
-          echo "::set-output name=ssh_private_key::${{ secrets.SSH_PRIVATE_KEY_DEPLOY }}"
-        else
-          echo "Invalid environment type selected."
-          exit 1
-        fi
+          zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}
 
     - name: Create and upload artifact
       uses: actions/upload-artifact@v2
@@ -66,12 +38,6 @@ jobs:
 
     - name: List downloaded files
       run: ls -al
-
-    - name: Handle Exceptions
-      if: failure()
-      run: |
-        echo "An error occurred in a previous step. Check the workflow logs for details."
-        exit 1
 
 
    #- name: Check out the repository to the runner
