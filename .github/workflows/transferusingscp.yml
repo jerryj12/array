@@ -16,16 +16,16 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-runner
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Copy specific folder to build directory
+    - name: Create ZIP Archive
       run: |
-        mkdir ../build
-        cp -r PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }} ../build
-        tar -cvf ${{ github.event.inputs.folder_name }}.tar -C ../build .
+          # Add commands to create a ZIP archive of your project in the root directory 
+          cd PLM_SOURCE/BUILD_MASTER
+          zip -r ${{ github.event.inputs.name }}.zip ${{ github.event.inputs.name }}
     
     - name: Set Environment Variables based on Environment Type
       id: env
@@ -49,31 +49,20 @@ jobs:
           echo "Invalid environment type selected."
           exit 1
         fi
-    
-    - name: Copy file via SSH password
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ steps.env.outputs.host }}
-        username: ${{ steps.env.outputs.username }}
-        password: ${{ steps.env.outputs.password }}
-        key: ${{ steps.env.outputs.ssh_private_key }}
-        port: ${{ secrets.PORT }}
-        source: "${{ github.event.inputs.folder_name }}.tar"
-        target: "/home/u813984108/domains/sociocast.co/public_html/scimail/"
-        
-    - name: SSH into the target server and execute the script
-      uses: appleboy/ssh-action@master
-      with:
-         host: ${{ steps.env.outputs.host }}
-         username: ${{ steps.env.outputs.username }}
-         password: ${{ steps.env.outputs.password }}
-         key: ${{ steps.env.outputs.ssh_private_key }}
-         port: ${{ secrets.PORT }}
-         script: |
-              cd /home/u813984108/domains/sociocast.co/public_html/scimail/
-              chmod +x my-script.sh
-              ./my-script.sh
 
+    - name: Create and upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+         name: ${{ github.event.inputs.folder_name }}.tar
+         path: PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip
+    
+    - name: Download .tar file to the runner
+      uses: actions/download-artifact@v2
+      with:
+        name: ${{ github.event.inputs.folder_name }}.zip
+
+    - name: List downloaded files
+      run: ls -al
 
    #- name: Check out the repository to the runner
       #uses: actions/checkout@v4  
