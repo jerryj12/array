@@ -25,7 +25,7 @@ jobs:
       run: |
           # Add commands to create a ZIP archive of your project in the root directory 
           cd PLM_SOURCE/BUILD_MASTER
-          zip -r ${{ github.event.inputs.name }}.zip ${{ github.event.inputs.name }}
+          zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}
     
     - name: Set Environment Variables based on Environment Type
       id: env
