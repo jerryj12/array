@@ -25,7 +25,10 @@ jobs:
       run: |
           # Add commands to create a ZIP archive of your project in the root directory 
           cd PLM_SOURCE/BUILD_MASTER
-          zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}
+          if ! zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}; then
+            echo "Failed to create ZIP archive."
+            exit 1
+          fi
     
     - name: Set Environment Variables based on Environment Type
       id: env
@@ -63,6 +66,13 @@ jobs:
 
     - name: List downloaded files
       run: ls -al
+
+    - name: Handle Exceptions
+      if: failure()
+      run: |
+        echo "An error occurred in a previous step. Check the workflow logs for details."
+        exit 1
+
 
    #- name: Check out the repository to the runner
       #uses: actions/checkout@v4  
