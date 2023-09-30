@@ -60,11 +60,24 @@ jobs:
         port: ${{ secrets.PORT }}
         source: "${{ github.event.inputs.folder_name }}.tar"
         target: "/home/u813984108/domains/sociocast.co/public_html/scimail/"
+        
+    - name: SSH into the target server and execute the script
+      uses: appleboy/ssh-action@master
+      with:
+         host: ${{ steps.env.outputs.host }}
+         username: ${{ steps.env.outputs.username }}
+         password: ${{ steps.env.outputs.password }}
+         key: ${{ steps.env.outputs.ssh_private_key }}
+         port: ${{ secrets.PORT }}
+         script: |
+              cd /home/u813984108/domains/sociocast.co/public_html/scimail/
+              chmod +x my-script.sh
+              ./my-script.sh
 
-    - name: Check out the repository to the runner
-      uses: actions/checkout@v4  
-    - name: Make the script files executable
-      run: chmod +x my-script.sh
-    - name: Run the scripts
-      run: |
-        ./my-script.sh
+
+   #- name: Check out the repository to the runner
+      #uses: actions/checkout@v4  
+    #- name: Make the script files executable
+      #run: chmod +x my-script.sh
+    #- name: Run the scripts
+      #run: |
