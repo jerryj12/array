@@ -31,7 +31,7 @@ jobs:
     - name: Create and upload artifact
       uses: actions/upload-artifact@v2
       with:
-         name: ${{ github.event.inputs.folder_name }}.tar
+         name: ${{ github.event.inputs.folder_name }}.zip
          path: PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip
     
     - name: Download .tar file to the runner
