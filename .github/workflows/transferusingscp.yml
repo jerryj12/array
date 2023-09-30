@@ -1,3 +1,6 @@
+name: Deploy to Linux Server via SCP
+
+
 on:
   workflow_dispatch:
     inputs:
