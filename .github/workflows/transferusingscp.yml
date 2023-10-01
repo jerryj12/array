@@ -65,9 +65,6 @@ jobs:
            cd D:\office\DBA
            #chmod +x my-script.sh
            #./my-script.sh
-            # Grant execute permission to the script
-           icacls "$scriptPath" /grant:r "%USERNAME%:RX"
-      
           # Run the script
            ./my-script.sh
           } 
