@@ -33,7 +33,7 @@ jobs:
           else
             echo "ZIP archive creation failed"
             exit 1  # Exit with an error code
-          }
+          
 
     - name: Create and upload artifact
       uses: actions/upload-artifact@v2
