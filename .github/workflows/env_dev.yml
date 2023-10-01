@@ -1,4 +1,4 @@
-name: Deploy to Linux Server via SCP
+name: Download zip to runner
 
 on:
   workflow_dispatch:
@@ -43,15 +43,15 @@ jobs:
 
     - name: Move the downloaded .zip file to D:/office/DBA
       run: |
-        $destinationPath = "D:\office\DBA\${{ github.event.inputs.folder_name }}.zip"
+        $destinationPath = "${{ github.event.inputs.folder_name }}.zip"
         if (Test-Path -Path $destinationPath) {
            Write-Host "File already exists: $destinationPath"
-           cd D:\office\DBA
+           #cd D:\office\DBA
            chmod +x my-script.sh
            ./my-script.sh
              } 
         else {
-           Move-Item -Path "$GITHUB_WORKSPACE/actions-runner/_work/array/array/PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip" -Destination $destinationPath
+           Move-Item -Path "PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip" -Destination $destinationPath
            #for Linux
            #mv $GITHUB_WORKSPACE/actions-runner/_work/array/array/PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip D:/office/DBA/ 
             }
@@ -65,9 +65,9 @@ jobs:
 
     - name: Run my-script.sh
       run: |
-        $scriptPath = "D:\office\DBA\my-script.sh"
+        $scriptPath = "my-script.sh"
         if (Test-Path -Path $scriptPath -PathType Leaf) {
-           cd D:\office\DBA
+           #cd D:\office\DBA
            chmod +x my-script.sh
            ./my-script.sh
           } 
