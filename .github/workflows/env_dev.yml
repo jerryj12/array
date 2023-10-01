@@ -25,13 +25,9 @@ jobs:
       run: |
           # Add commands to create a ZIP archive of your project in the root directory 
           cd PLM_SOURCE/BUILD_MASTER
-          zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}
-      continue-on-error: true
-      # Capture the exit code and display error message if it fails
-      if: ${{ failure() }}
-      run: |
-        echo "Error: Failed to create ZIP archive"
-        exit 1
+          if ! zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}; then
+            echo "Error: Failed to create ZIP archive"
+          fi
 
     - name: Create and upload artifact
       uses: actions/upload-artifact@v2
@@ -39,44 +35,23 @@ jobs:
          name: ${{ github.event.inputs.folder_name }}.zip
          path: PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip
 
-    - name: Move the downloaded .zip file to Local drive
+    - name: Move the downloaded .zip file to D:/office/DBA
       run: |     
-           mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip build/${{ github.event.inputs.folder_name }}.zip
-      continue-on-error: true
-      # Capture the exit code and display error message if it fails
-      if: ${{ failure() }}
-      run: |
-        echo "Error: Failed to move the ZIP file"
-        exit 1
+           if ! mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip build/${{ github.event.inputs.folder_name }}.zip; then
+             echo "Error: Failed to move the ZIP file"
+           fi
 
     - name: Check out the repository to the runner
       uses: actions/checkout@v4  
 
     - name: Make the script files executable
-      run: chmod +x my-script.sh
-      continue-on-error: true
-      # Capture the exit code and display error message if it fails
-      if: ${{ failure() }}
       run: |
-        echo "Error: Failed to make script files executable"
-        exit 1
+        if ! chmod +x my-script.sh; then
+          echo "Error: Failed to make script files executable"
+        fi
 
     - name: Run the scripts
       run: |
-        ./my-script.sh
-      continue-on-error: true
-      # Capture the exit code and display error message if it fails
-      if: ${{ failure() }}
-      run: |
-        echo "Error: Failed to run the scripts"
-        exit 1
-
-    # Add a final step to check for overall workflow status
-    - name: Check Workflow Status
-      run: |
-        if [ ${{ job.status }} == "failure" ]; then
-          echo "Workflow failed with errors."
-          exit 1
-        else
-          echo "Workflow completed successfully."
+        if ! ./my-script.sh; then
+          echo "Error: Failed to run the scripts"
         fi
