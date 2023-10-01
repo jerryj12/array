@@ -42,16 +42,26 @@ jobs:
          path: PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip
 
     - name: Move the downloaded .zip file to D:/office/DBA
-      run: |
-        #mv $GITHUB_WORKSPACE/actions-runner/_work/array/array/PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip D:/office/DBA/
-        
-        # Check if the move command was successful
-        if (mv $GITHUB_WORKSPACE/actions-runner/_work/array/array/PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip D:/office/DBA/) {
+    run: |
+      $sourceFile = "$GITHUB_WORKSPACE/actions-runner/_work/array/array/PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip"
+      $destination = "D:/office/DBA/"
+
+      if (Test-Path $sourceFile) {
+        if (-Not (Test-Path $destination)) {
+          New-Item -ItemType Directory -Force -Path $destination
+        }
+
+        $destinationFile = Join-Path $destination -ChildPath $sourceFile
+        if (-Not (Test-Path $destinationFile)) {
+          Move-Item -Path $sourceFile -Destination $destination
           Write-Host "Move successful"
         } else {
-          Write-Host "Move failed"
-          exit 1  # Exit with an error code
+          Write-Host "File already exists at the destination"
         }
+      } else {
+        Write-Host "Source file not found"
+        exit 1  # Exit with an error code
+       }
 
 
 
