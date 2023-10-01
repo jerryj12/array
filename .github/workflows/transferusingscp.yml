@@ -35,7 +35,7 @@ jobs:
 
     - name: Move the downloaded .zip file to D:/office/DBA
       run: |
-        mv $GITHUB_WORKSPACE/${{ github.event.inputs.folder_name }}.zip D:/office/DBA/
+        mv $GITHUB_WORKSPACE/PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip D:/office/DBA/
 
 
     #- name: List downloaded files
