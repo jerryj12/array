@@ -52,6 +52,8 @@ jobs:
              } 
         else {
            Move-Item -Path "$GITHUB_WORKSPACE/actions-runner/_work/array/array/PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip" -Destination $destinationPath
+           #for Linux
+           #mv $GITHUB_WORKSPACE/actions-runner/_work/array/array/PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip D:/office/DBA/ 
             }
 
 
