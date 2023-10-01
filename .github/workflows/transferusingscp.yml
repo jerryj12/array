@@ -60,7 +60,19 @@ jobs:
 
     - name: Run my-script.sh
       run: |
-        cd D:/office/DBA/
-        chmod +x my-script.sh
-        ./my-script.sh
+        $scriptPath = "D:\office\DBA\my-script.sh"
+        if (Test-Path -Path $scriptPath -PathType Leaf) {
+           cd D:\office\DBA
+           #chmod +x my-script.sh
+           #./my-script.sh
+            # Grant execute permission to the script
+           icacls "$scriptPath" /grant:r "%USERNAME%:RX"
+      
+          # Run the script
+           ./my-script.sh
+          } 
+        else {
+          Write-Host "Error: my-script.sh not found in D:\office\DBA"
+           }
+
 
