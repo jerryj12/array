@@ -44,7 +44,7 @@ jobs:
     - name: Move the downloaded .zip file to D:/office/DBA
       run: |
         destination_path="D:/office/DBA/${{ github.event.inputs.folder_name }}.zip"
-        if [ -e "$destination_path" ]; then
+        if ( -e "$destination_path" ); then
            echo "File already exists: $destination_path"
         else
            mv -f $GITHUB_WORKSPACE/actions-runner/_work/array/array/PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip "$destination_path"
