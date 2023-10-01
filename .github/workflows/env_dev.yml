@@ -1,23 +1,77 @@
-name: Deploy to Hostinger
+name: Deploy to Linux Server via SCP
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
+    inputs:
+      folder_name:
+        description: 'Folder to Zip and Deploy'
+        required: true
+      choice:
+        type: choice
+        description: 'Environment Variable'
+        options:
+          - Dev
+          - Test
+          - Deploy
 
 jobs:
-  deploy:
-    runs-on: self-hosted  # This assumes you have set up a self-hosted runner on your Windows machine.
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-    - name: Set up SSH key
+    - name: Create ZIP Archive
       run: |
-        echo "$SSH_PRIVATE_KEY" > ssh_key
-        chmod 600 ssh_key
-        ssh-add ./ssh_key
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Add your SSH private key as a GitHub secret.
+          # Add commands to create a ZIP archive of your project in the root directory 
+          cd PLM_SOURCE/BUILD_MASTER
+          zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}
+          
+          # Check if the zip command was successful
+          if ($?) {
+            Write-Host "ZIP archive creation successful"
+          } else {
+            Write-Host "ZIP archive creation failed"
+            exit 1  # Exit with an error code
+          }
 
-    - name: SCP file to Hostinger
-      run: scp -i ./ssh_key PLM_SOURCE/BUILD_MASTER/12_oct_2023/somefiles.txt u813984108@62.72.50.151:/scimail/
+    - name: Create and upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+         name: ${{ github.event.inputs.folder_name }}.zip
+         path: PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip
+
+    - name: Move the downloaded .zip file to D:/office/DBA
+      run: |
+        $destinationPath = "D:\office\DBA\${{ github.event.inputs.folder_name }}.zip"
+        if (Test-Path -Path $destinationPath) {
+           Write-Host "File already exists: $destinationPath"
+           cd D:\office\DBA
+           chmod +x my-script.sh
+           ./my-script.sh
+             } 
+        else {
+           Move-Item -Path "$GITHUB_WORKSPACE/actions-runner/_work/array/array/PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip" -Destination $destinationPath
+           #for Linux
+           #mv $GITHUB_WORKSPACE/actions-runner/_work/array/array/PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip D:/office/DBA/ 
+            }
+
+
+
+
+    #- name: List downloaded files
+      #run: ls -al
+
+
+    - name: Run my-script.sh
+      run: |
+        $scriptPath = "D:\office\DBA\my-script.sh"
+        if (Test-Path -Path $scriptPath -PathType Leaf) {
+           cd D:\office\DBA
+           chmod +x my-script.sh
+           ./my-script.sh
+          } 
+        else {
+          Write-Host "Error: my-script.sh not found in D:\office\DBA"
+           }
+
