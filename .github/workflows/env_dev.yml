@@ -28,10 +28,10 @@ jobs:
           zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}
           
           # Check if the zip command was successful
-          if ($?) {
-            Write-Host "ZIP archive creation successful"
-          } else {
-            Write-Host "ZIP archive creation failed"
+          if [ $? -eq 0 ]; then
+            echo "ZIP archive creation successful"
+          else
+            echo "ZIP archive creation failed"
             exit 1  # Exit with an error code
           }
 
@@ -41,37 +41,21 @@ jobs:
          name: ${{ github.event.inputs.folder_name }}.zip
          path: PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip
 
-    - name: Move the downloaded .zip file to D:/office/DBA
+    - name: Move the downloaded .zip file to a local drive
       run: |
         $destinationPath = "${{ github.event.inputs.folder_name }}.zip"
-        if (Test-Path -Path $destinationPath) {
-           Write-Host "File already exists: $destinationPath"
-           #cd D:\office\DBA
-           chmod +x my-script.sh
-           ./my-script.sh
-             } 
-        else {
-           Move-Item -Path "PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip" -Destination $destinationPath
-           #for Linux
-           #mv $GITHUB_WORKSPACE/actions-runner/_work/array/array/PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip D:/office/DBA/ 
-            }
+        if [ -f "$destinationPath" ]; then
+           echo "File already exists: $destinationPath"
+        else
+           mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip $destinationPath
+        fi
 
-
-
-
-    #- name: List downloaded files
-      #run: ls -al
-
-
-    - name: Run my-script.sh
+    - name: Run my-script.sh (Linux)
       run: |
         $scriptPath = "my-script.sh"
-        if (Test-Path -Path $scriptPath -PathType Leaf) {
-           #cd D:\office\DBA
-           chmod +x my-script.sh
+        if [ -f "$scriptPath" ]; then
+           chmod +x $scriptPath
            ./my-script.sh
-          } 
-        else {
-          Write-Host "Error: my-script.sh not found in D:\office\DBA"
-           }
-
+        else
+          echo "Error: $scriptPath not found"
+        fi
