@@ -36,20 +36,12 @@ jobs:
          path: PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip
 
     - name: Move the downloaded .zip file to D:/office/DBA
-      run: |
-        destinationPath="array/build/${{ github.event.inputs.folder_name }}.zip"
-        if [ -f "$destinationPath" ]; then
-           echo "File already exists: $destinationPath"
-        else
-           mv "PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip" "$destinationPath"
-        fi
+      run: |     
+           mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip array/build/${{ github.event.inputs.folder_name }}.zip
+       
 
     - name: Run my-script.sh (Linux)
       run: |
-        scriptPath="my-script.sh"
-        if [ -f "$scriptPath" ]; then
-           chmod +x "$scriptPath"
-           "./$scriptPath"
-        else
-          echo "Error: $scriptPath not found"
-        fi
+           chmod +x my-script.sh
+           ./$scriptPath
+        
