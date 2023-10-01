@@ -1,6 +1,5 @@
 name: Deploy to Linux Server via SCP
 
-
 on:
   workflow_dispatch:
     inputs:
@@ -33,11 +32,11 @@ jobs:
       with:
          name: ${{ github.event.inputs.folder_name }}.zip
          path: PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip
-    
-    - name: Download .tar file to the runner
-      uses: actions/download-artifact@v2
-      with:
-        name: ${{ github.event.inputs.folder_name }}.zip
+
+    - name: Move the downloaded .zip file to D:/office/DBA
+      run: |
+        mv $GITHUB_WORKSPACE/${{ github.event.inputs.folder_name }}.zip D:/office/DBA/
+
 
     #- name: List downloaded files
       #run: ls -al
