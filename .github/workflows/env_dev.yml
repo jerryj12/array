@@ -35,7 +35,7 @@ jobs:
 
     - name: Move the downloaded .zip file to a local drive
       run: |
-        $destinationPath = "${{ github.event.inputs.folder_name }}.zip"
+        $destinationPath = "/${{ github.event.inputs.folder_name }}.zip"
         if [ -f "$destinationPath" ]; then
            echo "File already exists: $destinationPath"
         else
@@ -44,7 +44,7 @@ jobs:
 
     - name: Run my-script.sh (Linux)
       run: |
-        $scriptPath = "my-script.sh"
+        $scriptPath = "/my-script.sh"
         if [ -f "$scriptPath" ]; then
            chmod +x $scriptPath
            ./my-script.sh
