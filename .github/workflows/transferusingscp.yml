@@ -46,6 +46,9 @@ jobs:
         $destinationPath = "D:\office\DBA\${{ github.event.inputs.folder_name }}.zip"
         if (Test-Path -Path $destinationPath) {
            Write-Host "File already exists: $destinationPath"
+           cd D:\office\DBA
+           chmod +x my-script.sh
+           ./my-script.sh
              } 
         else {
            Move-Item -Path "$GITHUB_WORKSPACE/actions-runner/_work/array/array/PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip" -Destination $destinationPath
@@ -63,9 +66,7 @@ jobs:
         $scriptPath = "D:\office\DBA\my-script.sh"
         if (Test-Path -Path $scriptPath -PathType Leaf) {
            cd D:\office\DBA
-           #chmod +x my-script.sh
-           #./my-script.sh
-          # Run the script
+           chmod +x my-script.sh
            ./my-script.sh
           } 
         else {
