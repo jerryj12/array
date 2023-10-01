@@ -25,17 +25,21 @@ jobs:
       run: |
           # Add commands to create a ZIP archive of your project in the root directory 
           cd PLM_SOURCE/BUILD_MASTER
-          zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }} || echo "Error creating ZIP archive."
+          if ! zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}; then
+            echo "Error creating ZIP archive."
+          fi
 
     - name: Create and upload artifact
-      uses: actions/upload-artifact@v2
-      with:
-         name: ${{ github.event.inputs.folder_name }}.zip
-         path: PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip || echo "Error uploading artifact."
+      run: |
+         if ! actions/upload-artifact@v2 name=${{ github.event.inputs.folder_name }}.zip path=PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip; then
+            echo "Error uploading artifact."
+         fi
 
     - name: Move the downloaded .zip file to D:/office/DBA
       run: |
-        mv $GITHUB_WORKSPACE/${{ github.event.inputs.folder_name }}.zip D:/office/DBA/ || echo "Error moving file to D:/office/DBA."
+        if ! mv $GITHUB_WORKSPACE/${{ github.event.inputs.folder_name }}.zip D:/office/DBA/; then
+            echo "Error moving file to D:/office/DBA."
+        fi
 
 
 
