@@ -40,8 +40,11 @@ jobs:
            mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip build/${{ github.event.inputs.folder_name }}.zip
        
 
-    - name: Run my-script.sh (Linux)
+    - name: Check out the repository to the runner
+      uses: actions/checkout@v4  
+    - name: Make the script files executable
+      run: chmod +x my-script.sh
+    - name: Run the scripts
       run: |
-           chmod +x my-script.sh
-           ./$scriptPath
+        ./my-script.sh
         
