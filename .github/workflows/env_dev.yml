@@ -35,7 +35,7 @@ jobs:
          name: ${{ github.event.inputs.folder_name }}.zip
          path: PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip
 
-    - name: Move the downloaded .zip file to D:/office/DBA
+    - name: Move the downloaded .zip file to local drive
       run: |     
            if ! mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip build/${{ github.event.inputs.folder_name }}.zip; then
              echo "Error: Failed to move the ZIP file"
