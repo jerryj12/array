@@ -10,5 +10,5 @@ SUBJECT="Test Email"
 MESSAGE="This is a test email sent from a shell script."
 
 
-# Use 'mutt' to send the email with SMTP settings
-echo "$MESSAGE" | mutt -s "$SUBJECT" -e "set smtp_url=smtp://$SMTP_USER:$SMTP_PASSWORD@$SMTP_SERVER:$SMTP_PORT" "$RECIPIENT"
+# Use the 'mail' command to send the email
+echo "$MESSAGE" | mail -s "$SUBJECT" -S smtp="$SMTP_SERVER":"$SMTP_PORT" -S smtp-use-starttls -S smtp-auth=login -S smtp-auth-user="$SMTP_USER" -S smtp-auth-password="$SMTP_PASSWORD" "$RECIPIENT"
