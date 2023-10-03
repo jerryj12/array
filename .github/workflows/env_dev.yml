@@ -47,10 +47,13 @@ jobs:
       run: |
           if [[ "${{ github.event.inputs.choice }}" == "Dev" ]]; then
            echo "ENVIRONMENT=PLMDEV" >> $GITHUB_ENV
+           echo "TGT_Server=PLMD" >> $GITHUB_ENV
           elif [[ "${{ github.event.inputs.choice }}" == "Test" ]]; then
            echo "ENVIRONMENT=PLMTST" >> $GITHUB_ENV
+           echo "TGT_Server=PLMTST" >> $GITHUB_ENV
           elif [[ "${{ github.event.inputs.choice }}" == "Prod" ]]; then
            echo "ENVIRONMENT=PLMPRD" >> $GITHUB_ENV
+           echo "TGT_Server=PLMPRD" >> $GITHUB_ENV
           else
            echo "Invalid environment selection"
           exit 1
@@ -87,7 +90,7 @@ jobs:
 
     - name: Run SSH command on target server
       run: |
-        if ! output=$(ssh plm@houenvap7 ".//app/plm/DBA/scripts/deployment_script.sh"); then
+        if ! output=$(ssh plm@$TGT_Server ".//app/plm/DBA/scripts/deployment_script.sh"); then
          echo "Error: Failed to run Script"
         fi
         echo "$output"
