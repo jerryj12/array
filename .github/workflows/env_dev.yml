@@ -59,7 +59,7 @@ jobs:
 
     - name: Move the downloaded .zip file to local drive
       run: |     
-           if ! mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip /install_media/PLM/DEPLOY/${ENVIRONMENT}/${{ github.event.inputs.folder_name }}.zip; then
+           if ! mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip /install_media/PLM/DEPLOY/${{ env.ENVIRONMENT }}/${{ github.event.inputs.folder_name }}.zip; then
              echo "Error: Failed to move the ZIP file"
              if ! chmod +x my-script.sh; then
              echo "Error: Failed to make email script executable"
