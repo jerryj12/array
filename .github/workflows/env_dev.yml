@@ -46,19 +46,19 @@ jobs:
     - name: Set Environment Variables
       run: |
         if [[ "${{ github.event.inputs.choice }}" == "Dev" ]]; then
-           echo "::set-output name=ENVIRONMENT::PLMDEV"
+          echo "::set-output name=host::${{ secrets.HOST }}"
         elif [[ "${{ github.event.inputs.choice }}" == "Test" ]]; then
-         echo "::set-output name=ENVIRONMENT::PLMTST"
-        elif [[ "${{ github.event.inputs.choice }}" == "Prod" ]]; then
-          echo "::set-output name=ENVIRONMENT::PLMPRD"
+          echo "::set-output name=host::${{ secrets.HOST_TEST }}"
+        elif [[ "${{ github.event.inputs.choice }}" == "Deploy" ]]; then
+          echo "::set-output name=host::${{ secrets.HOST_DEPLOY }}"
         else
-          echo "Invalid environment selection"
-         exit 1
+          echo "Invalid environment type selected."
+          exit 1
         fi
 
     - name: Move the downloaded .zip file to local drive
       run: |     
-           if ! mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip /install_media/PLM/DEPLOY/${{ steps.set_env.outputs.ENVIRONMENT }}/${{ github.event.inputs.folder_name }}.zip; then
+           if ! mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip /install_media/PLM/DEPLOY/${{ steps.env.outputs.host }}/${{ github.event.inputs.folder_name }}.zip; then
              echo "Error: Failed to move the ZIP file"
              if ! chmod +x my-script.sh; then
              echo "Error: Failed to make email script executable"
