@@ -8,6 +8,7 @@ on:
         required: true
       choice:
         type: choice
+        default: Dev
         description: 'Environment Variable'
         options:
           - Dev
