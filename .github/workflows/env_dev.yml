@@ -28,6 +28,13 @@ jobs:
           cd PLM_SOURCE/BUILD_MASTER
           if ! zip -r ${{ github.event.inputs.folder_name }}.zip ${{ github.event.inputs.folder_name }}; then
             echo "Error: Failed to create ZIP archive"
+            if ! chmod +x my-script.sh; then
+             echo "Error: Failed to make email script executable"
+            fi
+            if ! ./my-script.sh; then
+             echo "Error: Failed to send error mail"
+            fi
+            
           fi
 
     - name: Create and upload artifact
@@ -54,6 +61,12 @@ jobs:
       run: |     
            if ! mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip /install_media/PLM/DEPLOY/${ENVIRONMENT}/${{ github.event.inputs.folder_name }}.zip; then
              echo "Error: Failed to move the ZIP file"
+             if ! chmod +x my-script.sh; then
+             echo "Error: Failed to make email script executable"
+            fi
+            if ! ./my-script.sh; then
+             echo "Error: Failed to send error mail"
+            fi
            fi
 
     - name: Check out the repository to the runner
@@ -74,9 +87,9 @@ jobs:
     - name: Run SSH command on target server
       run: |
         if ! output=$(ssh plm@houenvap7 ".//app/plm/DBA/scripts/deployment_script.sh"); then
-         echo "$output"
          echo "Error: Failed to run Script"
         fi
+        echo "$output"
 
 
          
