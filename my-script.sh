@@ -9,5 +9,14 @@ RECIPIENT="ahmed.sociocast@gmail.com"  # Replace with the recipient's email addr
 SUBJECT="Test Email"
 MESSAGE="This is a test email sent from a shell script."
 
-# Use the 'mail' command to send the email
-echo "$MESSAGE" | mail -s "$SUBJECT" -S smtp="$SMTP_SERVER":"$SMTP_PORT" -S smtp-use-starttls -S smtp-auth=login -S smtp-auth-user="$SMTP_USER" -S smtp-auth-password="$SMTP_PASSWORD" "$RECIPIENT"
+# Create a temporary file to hold the email content
+EMAIL_FILE=$(mktemp)
+echo "Subject: $SUBJECT" >> "$EMAIL_FILE"
+echo "" >> "$EMAIL_FILE"
+echo "$MESSAGE" >> "$EMAIL_FILE"
+
+# Use the 'sendmail' command to send the email
+/usr/sbin/sendmail -v -S "$SMTP_SERVER:$SMTP_PORT" -au"$SMTP_USER" -ap"$SMTP_PASSWORD" "$RECIPIENT" < "$EMAIL_FILE"
+
+# Clean up the temporary file
+rm "$EMAIL_FILE"
