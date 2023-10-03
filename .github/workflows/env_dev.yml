@@ -73,13 +73,11 @@ jobs:
 
     - name: Run SSH command on target server
       run: |
-        output=$(ssh plm@houenvap7 ".//app/plm/DBA/scripts/deployment_script.sh")
-        ssh_exit_code=$?
-        if [ $ssh_exit_code -eq 0 ]; then
-            echo "$output"
-        else
-           echo "Error: Failed to run Script"
-         fi
+        if ! output=$(ssh plm@houenvap7 ".//app/plm/DBA/scripts/deployment_script.sh"); then
+         echo "$output"
+         echo "Error: Failed to run Script"
+        fi
+
 
          
 
