@@ -38,11 +38,11 @@ jobs:
 
     - name: Set Environment Variables
       run: |
-        if [[ "${{ github.event.inputs.environment }}" == "Dev" ]]; then
+        if [[ "${{ github.event.inputs.choice }}" == "Dev" ]]; then
           export ENVIRONMENT="PLMDEV"
-        elif [[ "${{ github.event.inputs.environment }}" == "Test" ]]; then
+        elif [[ "${{ github.event.inputs.choice }}" == "Test" ]]; then
           export ENVIRONMENT="PLMTST"
-        elif [[ "${{ github.event.inputs.environment }}" == "Prod" ]]; then
+        elif [[ "${{ github.event.inputs.choice }}" == "Prod" ]]; then
           export ENVIRONMENT="PLMPRD"
         else
           echo "Invalid environment selection"
