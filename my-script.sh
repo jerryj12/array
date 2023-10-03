@@ -11,4 +11,4 @@ MESSAGE="This is a test email sent from a shell script."
 
 
 # Use 'mail' command to send the email with SMTP settings
-echo "$MESSAGE" | mail -s "$SUBJECT" "$RECIPIENT"
+echo "This will go into the body of the mail." | mail -s "Hello world" ahmed.sociocast@gmail.com
