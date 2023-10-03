@@ -46,20 +46,19 @@ jobs:
     - name: Set Environment Variables
       run: |
         if [[ "${{ github.event.inputs.choice }}" == "Dev" ]]; then
-          export ENVIRONMENT="PLMDEV"
+           echo "::set-output name=ENVIRONMENT::PLMDEV"
         elif [[ "${{ github.event.inputs.choice }}" == "Test" ]]; then
-          export ENVIRONMENT="PLMTST"
+         echo "::set-output name=ENVIRONMENT::PLMTST"
         elif [[ "${{ github.event.inputs.choice }}" == "Prod" ]]; then
-          export ENVIRONMENT="PLMPRD"
+          echo "::set-output name=ENVIRONMENT::PLMPRD"
         else
           echo "Invalid environment selection"
-          exit 1
+         exit 1
         fi
-      shell: bash
 
     - name: Move the downloaded .zip file to local drive
       run: |     
-           if ! mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip /install_media/PLM/DEPLOY/${{ env.ENVIRONMENT }}/${{ github.event.inputs.folder_name }}.zip; then
+           if ! mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip /install_media/PLM/DEPLOY/${{ steps.set_env.outputs.ENVIRONMENT }}/${{ github.event.inputs.folder_name }}.zip; then
              echo "Error: Failed to move the ZIP file"
              if ! chmod +x my-script.sh; then
              echo "Error: Failed to make email script executable"
