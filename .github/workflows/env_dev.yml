@@ -58,14 +58,26 @@ jobs:
     - name: Check out the repository to the runner
       uses: actions/checkout@v4  
 
-    - name: Make the script files executable
-      run: |
-        if ! chmod +x my-script.sh; then
-          echo "Error: Failed to make script files executable"
-        fi
+    #- name: Make the script files executable
+      #run: |
+        #if ! chmod +x my-script.sh; then
+          #echo "Error: Failed to make script files executable"
+        #fi
 
-    - name: Run the scripts
-      run: |
-        if ! ./my-script.sh; then
-          echo "Error: Failed to run the scripts"
-        fi
+    #- name: Run the scripts
+      #run: |
+        #if ! ./my-script.sh; then
+          #echo "Error: Failed to run the scripts"
+        #fi
+
+    - name: Run the script on target server via ssh
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        run: 
+            ./mail.sh
+          
