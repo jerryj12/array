@@ -35,9 +35,23 @@ jobs:
          name: ${{ github.event.inputs.folder_name }}.zip
          path: PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip
 
+    - name: Set Environment Variables
+      run: |
+        if [[ "${{ github.event.inputs.environment }}" == "Dev" ]]; then
+          export ENVIRONMENT="PLMDEV"
+        elif [[ "${{ github.event.inputs.environment }}" == "Test" ]]; then
+          export ENVIRONMENT="PLMTST"
+        elif [[ "${{ github.event.inputs.environment }}" == "Prod" ]]; then
+          export ENVIRONMENT="PLMPRD"
+        else
+          echo "Invalid environment selection"
+          exit 1
+        fi
+      shell: bash
+
     - name: Move the downloaded .zip file to local drive
       run: |     
-           if ! mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip build/${{ github.event.inputs.folder_name }}.zip; then
+           if ! mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip /install_media/PLM/DEPLOY/${ENVIRONMENT}/${{ github.event.inputs.folder_name }}.zip; then
              echo "Error: Failed to move the ZIP file"
            fi
 
