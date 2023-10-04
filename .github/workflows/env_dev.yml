@@ -49,7 +49,7 @@ jobs:
            echo "ENVIRONMENT=file2" >> $GITHUB_ENV
            echo "TGT_Server=PLMD" >> $GITHUB_ENV
           elif [[ "${{ github.event.inputs.choice }}" == "Test" ]]; then
-           echo "ENVIRONMENT=PLMTST" >> $GITHUB_ENV
+           echo "ENVIRONMENT=file1" >> $GITHUB_ENV
            echo "TGT_Server=PLMTST" >> $GITHUB_ENV
           elif [[ "${{ github.event.inputs.choice }}" == "Prod" ]]; then
            echo "ENVIRONMENT=PLMPRD" >> $GITHUB_ENV
@@ -65,12 +65,6 @@ jobs:
            if ! mv PLM_SOURCE/BUILD_MASTER/${{ github.event.inputs.folder_name }}.zip /home/ahmer/$ENVIRONMENT/${{ github.event.inputs.folder_name }}.zip; then
              echo "Error: Failed to move the ZIP file"
              exit 1
-             if ! chmod +x my-script.sh; then
-             echo "Error: Failed to make email script executable"
-            fi
-            if ! ./my-script.sh; then
-             echo "Error: Failed to send error mail"
-            fi
            fi
 
     - name: Check out the repository to the runner
@@ -92,6 +86,7 @@ jobs:
       run: |
         if ! output=$(ssh plm@$TGT_Server ".//app/plm/DBA/scripts/deployment_script.sh"); then
          echo "Error: Failed to run Script"
+         exit 1
         fi
         echo "$output"
 
