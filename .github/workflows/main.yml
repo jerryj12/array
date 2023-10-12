@@ -102,21 +102,21 @@ jobs:
 
       - name: Set up environment
         run: |
-          endpoint=${{ secrets.ITAR_CNTRL_M_API_ENDPNT }}
-          user=${{ secrets.CTRLM_USER_ID }}
-          passwd=${{ secrets.CTRLM_PASSWD }}
-          ctm=HANICMAP1
-          folderName=PLM-PLMTST-DEPLOYMENT
-          orderDate=$(date '+%Y%m%d')
-          jobName=Enovia_Deployment
+           endpoint=${{ secrets.ITAR_CNTRL_M_API_ENDPNT }}
+           user=${{ secrets.CTRLM_USER_ID }}
+           passwd=${{ secrets.CTRLM_PASSWD }}
+           ctm=HANICMAP1
+           folderName=PLM-PLMTST-DEPLOYMENT
+           orderDate=$(date '+%Y%m%d')
+           jobName=Enovia_Deployment
         env:
-          ENDPOINT: $endpoint
-          USER: $user
-          PASSWD: $passwd
-          CTM: $ctm
-          FOLDERNAME: $folderName
-          ORDERDATE: $orderDate
-          JOBNAME: $jobName
+           ENDPOINT: $endpoint
+           USER: $user
+           PASSWD: $passwd
+           CTM: $ctm
+           FOLDERNAME: $folderName
+           ORDERDATE: $orderDate
+           JOBNAME: $jobName
 
       - name: Login
         run: |
