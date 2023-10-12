@@ -1,9 +1,7 @@
-name: Your Workflow Name
+name: ControlM
 
 on:
-  push:
-    branches:
-      - main  # Adjust to your branch name
+  workflow_dispatch:
 
 jobs:
   deploy:
