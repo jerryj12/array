@@ -31,7 +31,6 @@ jobs:
 
       - name: Login
         run: |
-          Write-Host $USER
           login=$(curl -H "Content-Type: application/json" -X POST -d "{"username":"${{ secrets.CTRLM_USER_ID }}","password":"$PASSWD"}" "$ENDPOINT/session/login")
           token=$(echo $login | tr -d '\r\n\t ')
         env:
