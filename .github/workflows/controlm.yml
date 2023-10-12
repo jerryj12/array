@@ -31,7 +31,7 @@ jobs:
 
       - name: Login
         run: |
-          login=$(curl -H "Content-Type: application/json" -X POST -d "{"username":"${{ secrets.CTRLM_USER_ID }}","password":"$PASSWD"}" "$ENDPOINT/session/login")
+          login=$(curl -H "Content-Type: application/json" -X POST -d "{"username":"Ahmed","password":"password"}" "https://api.sketchfab.com/session/login")
           token=$(echo $login | tr -d '\r\n\t ')
         env:
           TOKEN: $token
