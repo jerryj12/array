@@ -34,39 +34,40 @@ jobs:
         run: |
           curl --request POST \
           --header 'content-type: application/json' \
-          --url https://cricketlive-11.000webhostapp.com/ranker/keyword_checker.php \
+          --url https://cricketlive-11.000webhostapp.com/ranker/keyword_checker.php? \
           --data '{
            "keywords": "go",
            "domain": "github.com"
           
            }'
-      - name: Login
-        run: |
-          login=curl -H "Content-Type: application/json" -X POST -d "{"username":"Ahmed","password":"password"}" "https://api.sketchfab.com/session/login"
+           
+      #- name: Login
+       # run: |
+        #  login=curl -H "Content-Type: application/json" -X POST -d "{"username":"Ahmed","password":"password"}" "https://api.sketchfab.com/session/login"
           #token=$(echo $login | tr -d '\r\n\t ')
-          write-host "$login"
-        env:
-          TOKEN: $token
+         # write-host "$login"
+        #env:
+         # TOKEN: $token
 
-      - name: Order Job
-        run: |
-          curl -X POST -H "Authorization: Bearer $TOKEN" --header "Content-Type: application/json" --header "Accept: application/json" -d "{
-            \"ctm\": \"$CTM\",
-            \"folder\": \"$FOLDERNAME\",
-            \"jobs\": \"$JOBNAME\",
-            \"hold\": \"false\",
-            \"ignoreCriteria\": \"true\",
-            \"independentFlow\": \"false\",
-            \"orderDate\": \"$ORDERDATE\",
-            \"waitForOrderDate\": \"false\",
-            \"createDuplicate\": \"false\",
-            \"orderIntoFolder\": \"Recent\",
-            \"variables\": [{\"arg\":\"12345\"}]
-          }" "$ENDPOINT/run/order"
+      #- name: Order Job
+       # run: |
+        #  curl -X POST -H "Authorization: Bearer $TOKEN" --header "Content-Type: application/json" --header "Accept: application/json" -d "{
+         #   \"ctm\": \"$CTM\",
+          #  \"folder\": \"$FOLDERNAME\",
+           # \"jobs\": \"$JOBNAME\",
+            #\"hold\": \"false\",
+            #\"ignoreCriteria\": \"true\",
+            #\"independentFlow\": \"false\",
+            #\"orderDate\": \"$ORDERDATE\",
+            #\"waitForOrderDate\": \"false\",
+            #\"createDuplicate\": \"false\",
+            #\"orderIntoFolder\": \"Recent\",
+            #\"variables\": [{\"arg\":\"12345\"}]
+          #}" "$ENDPOINT/run/order"
 
-      - name: Logout
-        run: |
-          curl -g -k -H "Authorization: Bearer $TOKEN" -X POST "$ENDPOINT/session/logout"
+      #- name: Logout
+        #run: |
+          #curl -g -k -H "Authorization: Bearer $TOKEN" -X POST "$ENDPOINT/session/logout"
 
 
       
