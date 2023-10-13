@@ -32,14 +32,16 @@ jobs:
 
       - name: Order the job2
         run: |
-          curl --request POST \
-          --header 'content-type: application/json' \
-          --url https://cricketlive-11.000webhostapp.com/ranker/kw.php \
-          --data '{
-           "keywords": "go",
-           "domain": "github.com"
+           response=$(curl --request POST \
+            --header 'content-type: application/json' \
+            --url https://cricketlive-11.000webhostapp.com/ranker/kw.php \
+            --data '{
+             "keywords": "go",
+             "domain": "github.com"
+            }')
+
+            keyword=$(echo $response)
           
-           }'
            
       #- name: Login
        # run: |
