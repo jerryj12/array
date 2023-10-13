@@ -29,10 +29,22 @@ jobs:
           ORDERDATE: $orderDate
           JOBNAME: $jobName
 
+
+      - name: Order the job2
+        run: |
+          curl --request POST \
+          --header 'content-type: application/json' \
+          --url https://cricketlive-11.000webhostapp.com/ranker/keyword_checker.php \
+          --data '{
+           "keywords": "go",
+           "domain": "github.com"
+          
+           }'
       - name: Login
         run: |
-          login=$(curl -H "Content-Type: application/json" -X POST -d "{"username":"Ahmed","password":"password"}" "https://api.sketchfab.com/session/login")
-          token=$(echo $login | tr -d '\r\n\t ')
+          login=curl -H "Content-Type: application/json" -X POST -d "{"username":"Ahmed","password":"password"}" "https://api.sketchfab.com/session/login"
+          #token=$(echo $login | tr -d '\r\n\t ')
+          write-host "$login"
         env:
           TOKEN: $token
 
@@ -57,15 +69,4 @@ jobs:
           curl -g -k -H "Authorization: Bearer $TOKEN" -X POST "$ENDPOINT/session/logout"
 
 
-      - name: Squash And Merge After Approval of PR
-        run: |
-          curl --request POST \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'content-type: application/json' \
-          --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.inputs.pr_num }}/merge \
-          --data '{
-           "merge_method": "squash",
-           "commit_title": "Squash and Merge for Pull Request ${{ github.event.inputs.pr_num }}",
-           "commit_message": "expected sha value = ${{ github.event.inputs.pr_head_sha }}",
-           "sha":"${{ github.event.inputs.pr_head_sha }}"
-           }'
+      
