@@ -40,7 +40,8 @@ jobs:
              "domain": "github.com"
             }')
 
-            keyword=$(echo $response)
+            echo $response
+            
           
            
       #- name: Login
