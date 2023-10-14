@@ -40,13 +40,14 @@ jobs:
               "keywords": "go",
               "domain": "github.com"
             }')
-           echo $response
+          echo "::set-output name=token::$response"  # This sets the 'token' output for the step
         env:
-          TOKEN: echo $response
+          API_DOMAIN: https://cricketlive-11.000webhostapp.com
 
       - name: Order job
         run: |
-          echo $TOKEN 
+          token=$("${{ steps.login.outputs.token }}")  # Access the 'token' output from the 'login' step
+          echo "Token: $token"
             
           
            
