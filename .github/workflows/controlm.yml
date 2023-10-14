@@ -40,17 +40,13 @@ jobs:
               "keywords": "go",
               "domain": "github.com"
             }')
-          echo "::set-output name=response::$response"
+           echo $response
         env:
-          TOKEN: ${{ steps.login.outputs.response }}
+          TOKEN: echo $response
 
-  order:
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Order job
         run: |
-          echo $TOKEN , this is GitHub's workflow.yml
+          echo $TOKEN 
             
           
            
