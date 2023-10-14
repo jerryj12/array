@@ -40,7 +40,7 @@ jobs:
               "keywords": "go",
               "domain": "github.com"
             }')
-          echo "tokenT=$(echo $response)" >> $GITHUB_ENV
+          echo "token=$(echo $response)" >> $GITHUB_ENV
 
       - name: Order job
         run: |
