@@ -30,7 +30,7 @@ jobs:
           JOBNAME: $jobName
 
 
-      - name: Order the job2
+      - name: Login
         run: |
            response=$(curl --request POST \
             --header 'content-type: application/json' \
@@ -40,7 +40,12 @@ jobs:
              "domain": "github.com"
             }')
 
-            echo $response
+            token = $response
+
+      - name: Order job
+        run: |
+            token = $response
+            echo $token
             
           
            
