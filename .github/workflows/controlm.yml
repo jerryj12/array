@@ -40,11 +40,9 @@ jobs:
              "domain": "github.com"
             }')
 
-            token = $response
-
       - name: Order job
         run: |
-            echo $token
+            echo $response
             
           
            
