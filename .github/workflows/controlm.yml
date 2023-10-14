@@ -13,14 +13,6 @@ jobs:
 
       - name: Set up environment
         run: |
-          endpoint=${{ secrets.ITAR_CNTRL_M_API_ENDPNT }}
-          user=${{ secrets.CTRLM_USER_ID }}
-          passwd=${{ secrets.CTRLM_PASSWD }}
-          ctm=HANICMAP1
-          folderName=PLM-PLMTST-DEPLOYMENT
-          orderDate=$(date '+%Y%m%d')
-          jobName=Enovia_Deployment
-
           echo "endpoint=$(echo ${{ secrets.ITAR_CNTRL_M_API_ENDPNT }})" >> $GITHUB_ENV
           echo "user=$(echo ${{ secrets.CTRLM_USER_ID }})" >> $GITHUB_ENV
           echo "passwd=$(echo ${{ secrets.CTRLM_PASSWD }})" >> $GITHUB_ENV
