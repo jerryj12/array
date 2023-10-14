@@ -26,21 +26,36 @@ jobs:
         run: |
           response=$(curl --request POST \
             --header 'content-type: application/json' \
-            --url https://cricketlive-11.000webhostapp.com/ranker/kw.php \
+            --url $endpoint/run/order \
             --data '{
-              "keywords": "go",
-              "domain": "github.com"
+              "username": "$user",
+              "password": "$passwd"
             }')
-          echo "token=$(echo $response)" >> $GITHUB_ENV
+          echo "token=$(echo $response | tr -d '\r\n\t)" >> $GITHUB_ENV
 
       - name: Order job
         run: |
-          echo "$token" 
-          echo "$orderDate"
-          echo "$user"
-          echo "$ctm"
-          
-           
+          order=$(curl --request POST \
+            --header 'authorization: Bearer $token' \
+            --header 'content-type: application/json' \
+            --url $endpoint/run/order \
+            --data '{
+              "ctm": "$ctm",
+              "folder": "$folderName",
+             "jobs": "$jobName",
+             "hold": "false",
+             "ignoreCriteria": "true",
+             "independentFlow": "false",
+             "orderDate": "$orderDate",
+             "waitForOrderDate": "false",
+             "createDuplicate":  "false",
+             "orderIntoFolder":  "Recent",
+             "variables": {"arg":"12345"}
+            }')
+            echo $order
+      - name: Logout
+        run: |
+          curl -g -k -H "Authorization: Bearer $TOKEN" -X POST "$endpoint/session/logout" 
       #- name: Login
        # run: |
         #  login=curl -H "Content-Type: application/json" -X POST -d "{"username":"Ahmed","password":"password"}" "https://api.sketchfab.com/session/login"
