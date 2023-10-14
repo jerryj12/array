@@ -39,10 +39,12 @@ jobs:
              "keywords": "go",
              "domain": "github.com"
             }')
+        env:
+          TOKEN: $response
 
       - name: Order job
         run: |
-            echo $response
+            echo $TOKEN
             
           
            
