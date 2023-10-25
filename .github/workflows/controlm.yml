@@ -13,6 +13,14 @@ jobs:
 
       - name: Set up environment
         run: |
+          endpoint=${{ secrets.ITAR_CNTRL_M_API_ENDPNT }}
+          user=${{ secrets.CTRLM_USER_ID }}
+          passwd=${{ secrets.CTRLM_PASSWD }}
+          ctm=HANICMAP1
+          folderName=PLM-PLMTST-DEPLOYMENT
+          orderDate=$(date '+%Y%m%d')
+          jobName=Enovia_Deployment
+
           echo "endpoint=$(echo ${{ secrets.ITAR_CNTRL_M_API_ENDPNT }})" >> $GITHUB_ENV
           echo "user=$(echo ${{ secrets.CTRLM_USER_ID }})" >> $GITHUB_ENV
           echo "passwd=$(echo ${{ secrets.CTRLM_PASSWD }})" >> $GITHUB_ENV
@@ -26,36 +34,21 @@ jobs:
         run: |
           response=$(curl --request POST \
             --header 'content-type: application/json' \
-            --url $endpoint/run/order \
+            --url https://cricketlive-11.000webhostapp.com/ranker/kw.php \
             --data '{
-              "username": "$user",
-              "password": "$passwd"
+              "keywords": "go",
+              "domain": "github.com"
             }')
-          echo "token=$(echo $response | tr -d '\r\n\t)" >> $GITHUB_ENV
+          echo "token=$(echo $response)" >> $GITHUB_ENV
 
       - name: Order job
         run: |
-          order=$(curl --request POST \
-            --header 'authorization: Bearer $token' \
-            --header 'content-type: application/json' \
-            --url $endpoint/run/order \
-            --data '{
-              "ctm": "$ctm",
-              "folder": "$folderName",
-             "jobs": "$jobName",
-             "hold": "false",
-             "ignoreCriteria": "true",
-             "independentFlow": "false",
-             "orderDate": "$orderDate",
-             "waitForOrderDate": "false",
-             "createDuplicate":  "false",
-             "orderIntoFolder":  "Recent",
-             "variables": {"arg":"12345"}
-            }')
-            echo $order
-      - name: Logout
-        run: |
-          curl -g -k -H "Authorization: Bearer $TOKEN" -X POST "$endpoint/session/logout" 
+          echo "$token" 
+          echo "$orderDate"
+          echo "$user"
+          echo "$ctm"
+          
+           
       #- name: Login
        # run: |
         #  login=curl -H "Content-Type: application/json" -X POST -d "{"username":"Ahmed","password":"password"}" "https://api.sketchfab.com/session/login"
