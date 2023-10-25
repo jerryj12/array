@@ -57,13 +57,13 @@ jobs:
           "version" : "9.20.0"
            }'
         
-            token=$(echo "$json_response" | jq -r '.token')
+            trimtoken=$(echo "$json_response" | jq -r '.token')
         
-            echo "Extracted Token: $token"
+            echo "Extracted Token: $trimtoken"
 
       - name: Use Extracted Token
         run: |
-            echo "$token"
+            echo "$trimtoken"
            
       #- name: Login
        # run: |
