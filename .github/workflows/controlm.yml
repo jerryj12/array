@@ -29,24 +29,7 @@ jobs:
           echo "orderDate=$(echo $(date '+%Y%m%d'))" >> $GITHUB_ENV
           echo "jobName=$(echo Enovia_Deployment)" >> $GITHUB_ENV
 
-      - name: Login
-        id: login
-        run: |
-          #response=$(curl --request POST \
-            #--header 'content-type: application/json' \
-            #--url https://cricketlive-11.000webhostapp.com/ranker/kw.php \
-            #--data '{
-              #"keywords": "go",
-              #"domain": "github.com"
-            #}')
-          #echo "token=$(echo $response)" >> $GITHUB_ENV
-
-      - name: Order job
-        run: |
-          #echo "$token" 
-          echo "$orderDate"
-          echo "$user"
-          echo "$ctm
+     
       
       - name: Extract Token from JSON   
         id: extract-token
