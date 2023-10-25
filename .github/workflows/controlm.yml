@@ -62,7 +62,7 @@ jobs:
             echo "Extracted Token: $token"
 
       - name: Use Extracted Token
-          run:|
+        run: |
             echo "$token"
            
       #- name: Login
