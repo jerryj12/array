@@ -46,8 +46,8 @@ jobs:
           echo "$token" 
           echo "$orderDate"
           echo "$user"
-          echo "$ctm"
-  
+          echo "$ctm
+      
       - name: Extract Token from JSON   
         id: extract-token
         run: |
@@ -57,9 +57,12 @@ jobs:
           "version" : "9.20.0"
            }'
         
-            token=$(echo "$json_response" | jq -r '.token')
+          token=$(echo "$json_response" | grep -o '"token" : ".*"' | sed 's/"token" : "//;s/".*$//')
+
+           echo "Extracted Token: $token"
+           # token=$(echo "$json_response" | jq -r '.token')
         
-            echo "Extracted Token: $token"
+           # echo "Extracted Token: $token"
             echo "trimmedtoken=$(echo $token)" >> $GITHUB_ENV
 
       - name: Use Extracted Token
