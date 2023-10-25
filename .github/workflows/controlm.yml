@@ -47,7 +47,23 @@ jobs:
           echo "$orderDate"
           echo "$user"
           echo "$ctm"
-          
+  
+      - name: Extract Token from JSON   
+        id: extract-token
+        run: |
+          json_response='{
+          "username" : "*",
+          "token" : "EC536C57F1A89F439A0143F763496373B8C17A37C7E9DD71CEB8B8F941DF429F14483B3B0AF74188ABE9C7D3306BEBC5652C67E98616B898132249A13597A5E6",
+          "version" : "9.20.0"
+           }'
+        
+            token=$(echo "$json_response" | jq -r '.token')
+        
+            echo "Extracted Token: $token"
+
+      - name: Use Extracted Token
+          run:|
+            echo "$token"
            
       #- name: Login
        # run: |
